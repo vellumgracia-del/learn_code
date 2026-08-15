@@ -1,27 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learncode_Saya</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portofolio Amara Selin"><title>Amara Selin — Portofolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+  <main class="page"><div class="glow"></div><section class="portfolio" aria-labelledby="name">
+    <p class="eyebrow">Portofolio pribadi</p>
+    <div class="profile-photo"><img src="https://images.unsplash.com/photo-1582896911227-c966f6e7fb93?w=360&h=360&fit=crop&auto=format" alt="Potret Amara Selin"><span class="online-dot" title="Sedang online"></span></div>
+    <header class="intro"><h1 id="name">Nama Kalian</h1><p class="role">Peminatan 1 &amp; Peminatan 2</p><p class="bio">Saya membuat website ini agar kalian dapat mengenali saya lebih dari sekedar nama namun juga dari musik yang sukai.</p></header>
+    <ul class="skills"><li>Kemampuan 1</li><li>Kmeampuan 2</li><li>Kemampuan 3</li></ul>
+    <section class="music-player" aria-label="Pemutar musik">
+      <div class="player-heading"><span>Now playing</span><span class="live-status">● <span id="status">Jeda</span></span></div>
+      <div class="song-info"><div class="vinyl" id="vinyl"><span></span></div><div><a id="link" target="_blank" rel="noopener"><h2 id="title">Golden Hour</h2></a><p id="artist">JVKE</p></div></div>
+      <input class="progress" id="progress" type="range" min="0" max="209" value="0" aria-label="Posisi lagu">
+      <div class="time-row"><span id="now">0:00</span><span id="left">-3:29</span></div>
+      <div class="controls"><button class="icon-button" id="prev" type="button" aria-label="Lagu sebelumnya">‹‹</button><button class="play-button" id="play" type="button">▶ <span>Putar</span></button><button class="icon-button" id="next" type="button" aria-label="Lagu berikutnya">››</button></div>
+      <div class="song-list" id="list" aria-label="Daftar lagu"></div>
+    </section>
+    <p class="footer-note">Dibuat oleh saya dengan semangat belajar.</p>
+  </section></main>
+  <script type="module" src="/script.js"></script>
+</body>
+</html>
 
-    <div class="card">
-        <!-- Foto diambil dari folder "foto" -->
-        <img src="foto/profil.jpg" alt="Foto Profil" class="card-foto">
-
-        <div class="card-info">
-            <h1 class="card-nama">Zulfa Fahmiy A.</h1>
-            <p class="card-bio">Web Developer • Pemula yang Ambisius</p>
-        </div>
-
-        <!-- Tombol menuju Instagram -->
-        <a href="https://instagram.com/USERNAME_ANDA" target="_blank" class="card-button">
-            Kunjungi Platform
-        </a>
-    </div>
 
     <script src="script.js"></script>
 </body>
