@@ -1,9 +1,9 @@
 // 1. Daftar lagu: [Judul, Artis, Durasi (detik), Nama File MP3]
-// PENTING: Ganti "lagu1.mp3" dengan nama file musik yang Anda upload ke GitHub!
+// Menggunakan link MP3 langsung dari server luar
 const songs = [
-  ["Golden Hour", "JVKE", 209, "lagu1.mp3"],
-  ["Ceilings", "Lizzy McAlpine", 194, "lagu2.mp3"],
-  ["Death Bed", "Powfu ft. beabadoobee", 173, "lagu3.mp3"],
+  ["Acoustic Breeze", "Bensound", 157, "https://www.bensound.com/bensound-music/bensound-acousticbreeze.mp3"],
+  ["Sunny", "Bensound", 140, "https://www.bensound.com/bensound-music/bensound-sunny.mp3"],
+  ["Memories", "Bensound", 230, "https://www.bensound.com/bensound-music/bensound-memories.mp3"],
 ];
 
 const $ = (id) => document.querySelector(id);
