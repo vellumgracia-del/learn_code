@@ -1,17 +1,16 @@
-// 1. Daftar lagu: [Judul, Artis, Durasi (detik), URL YouTube]
+// 1. Daftar lagu: [Judul, Artis, Durasi (detik), Nama File MP3]
+// PENTING: Ganti "lagu1.mp3" dengan nama file musik yang Anda upload ke GitHub!
 const songs = [
-  ["Golden Hour", "JVKE", 209, "https://www.youtube.com/watch?v=PEM0Vs8jf1w"],
-  ["Ceilings", "Lizzy McAlpine", 194, "https://www.youtube.com/watch?v=2bpMSpFTdzM"],
-  ["Death Bed", "Powfu ft. beabadoobee", 173, "https://www.youtube.com/watch?v=jJPMnTXl63E"],
+  ["Golden Hour", "JVKE", 209, "lagu1.mp3"],
+  ["Ceilings", "Lizzy McAlpine", 194, "lagu2.mp3"],
+  ["Death Bed", "Powfu ft. beabadoobee", 173, "lagu3.mp3"],
 ];
 
-// 2. Fungsi pembantu untuk mempermudah pemanggilan elemen HTML
 const $ = (id) => document.querySelector(id);
 
-// 3. Mengambil semua elemen yang ada di HTML
 const title = $("#title");
 const artist = $("#artist");
-const link = $("#link");
+const link = $("#link"); 
 const bar = $("#progress");
 const now = $("#now");
 const left = $("#left");
@@ -20,119 +19,119 @@ const vinyl = $("#vinyl");
 const list = $("#list");
 const playBtn = $("#play");
 
-// 4. Variabel state (keadaan saat ini)
+// === FITUR BARU: AUDIO PLAYER ASLI ===
+const audio = new Audio(); // Membuat mesin pemutar audio di belakang layar
 let currentSongIndex = 0;
-let currentTime = 0;
 let isPlaying = false;
-let timer;
 
-// 5. Fungsi untuk mengubah detik menjadi format menit:detik (misal: 209 -> 3:29)
+// Fungsi untuk mengubah detik menjadi menit:detik
 const formatTime = (seconds) => {
+  if (isNaN(seconds)) return "0:00";
   const minutes = Math.floor(seconds / 60);
-  const secs = String(seconds % 60).padStart(2, "0");
+  const secs = String(Math.floor(seconds % 60)).padStart(2, "0");
   return `${minutes}:${secs}`;
 };
 
-// 6. Fungsi utama untuk menggambar/memperbarui tampilan (UI)
+// Fungsi untuk memperbarui tampilan web
 function updateUI() {
-  const [name, singer, duration, url] = songs[currentSongIndex];
-  const percent = (currentTime / duration) * 100;
+  const [name, singer, duration, audioFile] = songs[currentSongIndex];
 
-  // Update Teks dan Link
   title.textContent = name;
   artist.textContent = singer;
-  link.href = url;
   
-  // Update Progress Bar
-  bar.max = duration;
-  bar.value = currentTime;
-  bar.style.setProperty("--progress", `${percent}%`); // Mengirim nilai ke CSS
-  
-  // Update Waktu
-  now.textContent = formatTime(currentTime);
-  left.textContent = `-${formatTime(duration - currentTime)}`;
-  
-  // Update Status & Tombol (Putar/Jeda)
-  status.textContent = isPlaying ? "Memutar" : "Jeda";
-  playBtn.innerHTML = isPlaying ? "Ⅱ <span>Jeda</span>" : "▶ <span>Putar</span>";
-  
-  // Putar Piringan Hitam jika sedang main
-  vinyl.classList.toggle("is-spinning", isPlaying);
-  
-  // Buat ulang daftar lagu
+  // Menghilangkan fungsi klik yang mengarahkan ke halaman lain pada judul besar
+  link.removeAttribute("href");
+  link.style.cursor = "default"; 
+
+  // Memperbarui daftar lagu di bawah
   list.innerHTML = songs.map((songData, index) => {
     const isActive = index === currentSongIndex ? "active" : "";
     return `
-      <a class="song-item ${isActive}" data-song="${index}" href="${songData[3]}" target="_blank" rel="noopener">
+      <a class="song-item ${isActive}" data-song="${index}" href="javascript:void(0);">
         <span>0${index + 1}</span>
         <span>${songData[0]}</span>
-        <span>↗</span>
+        <span>▶</span> 
       </a>
     `;
   }).join("");
+
+  status.textContent = isPlaying ? "Memutar" : "Jeda";
+  playBtn.innerHTML = isPlaying ? "Ⅱ <span>Jeda</span>" : "▶ <span>Putar</span>";
+  vinyl.classList.toggle("is-spinning", isPlaying);
 }
 
-// 7. Fungsi untuk mengganti lagu
+// Fungsi untuk mengganti lagu
 function changeSong(index) {
   currentSongIndex = index;
-  currentTime = 0; // Reset waktu ke 0
+  const audioFile = songs[currentSongIndex][3];
+
+  audio.src = audioFile; // Memasukkan file mp3 ke mesin pemutar
+
+  // Jika lagu di-klik, langsung putar audionya!
+  isPlaying = true;
+  audio.play();
+  
   updateUI();
 }
 
-// 8. Fungsi untuk Menjalankan / Menghentikan lagu
+// Fungsi tombol Putar / Jeda utama
 function togglePlay() {
-  isPlaying = !isPlaying;
-  clearInterval(timer); // Bersihkan timer yang berjalan sebelumnya
+  // Jika tombol play ditekan pertama kali dan belum ada lagu yang dimuat
+  if (!audio.src) {
+    audio.src = songs[currentSongIndex][3];
+  }
 
   if (isPlaying) {
-    // Jika memutar, jalankan detik setiap 1000ms (1 detik)
-    timer = setInterval(() => {
-      const duration = songs[currentSongIndex][2];
-      
-      if (currentTime >= duration) {
-        // Jika lagu habis, otomatis putar lagu selanjutnya
-        changeSong((currentSongIndex + 1) % songs.length);
-      } else {
-        currentTime++;
-      }
-      updateUI();
-    }, 1000);
+    audio.pause(); // Jeda lagu asli
+  } else {
+    audio.play();  // Putar lagu asli
   }
+  
+  isPlaying = !isPlaying;
   updateUI();
 }
 
-// 9. EVENT LISTENERS (Menangkap klik dari user)
+// === EVENT LISTENER UNTUK AUDIO (Sistem Canggih) ===
 
-// Klik tombol Putar/Jeda
-playBtn.onclick = togglePlay;
+// Event ini akan jalan otomatis saat lagu berputar (menggeser bar & waktu)
+audio.addEventListener("timeupdate", () => {
+  const currentTime = audio.currentTime; // Ambil waktu asli dari lagu
+  const duration = songs[currentSongIndex][2]; // Ambil durasi dari array
+  const percent = (currentTime / duration) * 100;
 
-// Klik tombol Next
-$("#next").onclick = () => {
+  bar.max = duration;
+  bar.value = currentTime;
+  bar.style.setProperty("--progress", `${percent}%`);
+
+  now.textContent = formatTime(currentTime);
+  left.textContent = `-${formatTime(duration - currentTime)}`;
+});
+
+// Kalau lagu habis, otomatis lompat dan putar lagu selanjutnya!
+audio.addEventListener("ended", () => {
   changeSong((currentSongIndex + 1) % songs.length);
-};
+});
 
-// Klik tombol Previous (Mundur)
-$("#prev").onclick = () => {
-  changeSong((currentSongIndex + songs.length - 1) % songs.length);
-};
 
-// Saat user menggeser progress bar secara manual
+// === EVENT LISTENER UNTUK TOMBOL ===
+
+playBtn.onclick = togglePlay;
+$("#next").onclick = () => changeSong((currentSongIndex + 1) % songs.length);
+$("#prev").onclick = () => changeSong((currentSongIndex + songs.length - 1) % songs.length);
+
+// Saat Anda menggeser progress bar dengan mouse (lagu akan ikut dipercepat/mundur)
 bar.oninput = () => {
-  currentTime = Number(bar.value);
-  updateUI();
+  audio.currentTime = Number(bar.value); 
+  updateUI(); 
 };
 
-// Saat user mengklik lagu di daftar lagu bagian bawah
+// Saat judul lagu di daftar bawah diklik
 list.onclick = (event) => {
   const item = event.target.closest("[data-song]");
   if (item) {
-    // Hapus tanda dua garis miring di bawah ini jika kamu TIDAK ingin 
-    // tab baru youtube terbuka saat baris lagu diklik.
-    // event.preventDefault(); 
-    
-    changeSong(Number(item.dataset.song));
+    changeSong(Number(item.dataset.song)); // Langsung ganti dan putar lagunya
   }
 };
 
-// 10. Inisialisasi: Panggil fungsi updateUI agar tampilan web terisi data saat pertama kali dibuka
+// Panggil pertama kali untuk menyiapkan tampilan
 updateUI();
