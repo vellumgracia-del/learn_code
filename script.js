@@ -1,9 +1,9 @@
 // 1. Daftar lagu: [Judul, Artis, Durasi (detik), Nama File MP3]
 // Menggunakan link MP3 langsung dari server luar
 const songs = [
-  ["Acoustic Breeze", "Bensound", 157, "https://www.bensound.com/bensound-music/bensound-acousticbreeze.mp3"],
-  ["Sunny", "Bensound", 140, "https://www.bensound.com/bensound-music/bensound-sunny.mp3"],
-  ["Memories", "Bensound", 230, "https://www.bensound.com/bensound-music/bensound-memories.mp3"],
+  ["Golden Hour", "JVKE", 209, "Golden Hour.mp3"],
+  ["Ceilings", "Lizzy McAlpine", 194, "Ceilings.mp3"],
+  ["Death Bed", "Powfu ft. beabadoobee", 173, "Dead Bed.mp3"],
 ];
 
 const $ = (id) => document.querySelector(id);
